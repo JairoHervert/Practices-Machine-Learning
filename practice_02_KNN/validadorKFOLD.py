@@ -5,7 +5,7 @@ from sklearn.model_selection import KFold
 # Importamos confusion_matrix para poder contar los casos exactos
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 from utils.ManejadorDatos import ManejadorDatos
-from utils.KNNPonderado import KNNPonderado
+from models.KNNPonderado import KNNPonderado
 
 def evaluar_kfold(X, y, k_vecinos=3, n_splits=5):
     """

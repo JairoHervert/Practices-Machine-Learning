@@ -1,7 +1,7 @@
 import argparse
 import sys
 from utils.ManejadorDatos import ManejadorDatos
-from utils.KNNPonderado import KNNPonderado
+from models.KNNPonderado import KNNPonderado
 
 def principal():
     """
