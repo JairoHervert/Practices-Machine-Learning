@@ -34,8 +34,13 @@ Por lo tanto, la actualización usada es:
     wi = wi + eta * delta * xi
     b  = b  + eta * delta
 
-En esta implementación se usa una versión por lotes, es decir, en cada época
-se calcula el promedio de los ajustes considerando todas las muestras.
+En esta implementación se usa gradiente estocástico (SGD): los pesos se
+actualizan muestra por muestra, no con el promedio de todo el lote. Esto
+corresponde a lo que el profesor llamó "gradiente estocástico":
+
+    E_d(w) = 1/2 * (t_d - o_d)^2   <- error de UNA muestra d
+
+El modelo procesa una muestra, actualiza pesos, luego pasa a la siguiente.
 """
 
 import numpy as np
@@ -153,33 +158,34 @@ class SigmoidGradientClassifier:
         self.history_ = []
 
         for epoch in range(1, self.n_epochs + 1):
-            z = self.net_input(X)
-            output = self.sigmoid(z)
 
-            error = y_float - output
+            # Mezclamos el orden de las muestras en cada época.
+            # Esto evita que el modelo aprenda el orden de los datos.
+            indices = rng.permutation(n_samples)
 
-            """
-            Cálculo del término delta.
+            # --- Gradiente estocástico: una muestra a la vez ---
+            # A diferencia del batch, aquí los pesos cambian después
+            # de CADA muestra, no al final de la época completa.
+            for i in indices:
+                xi = X[i]           # una muestra: vector de 30 características
+                ti = y_float[i]     # su etiqueta real (0 o 1)
 
-            Para error cuadrático medio y salida sigmoidal:
+                # Paso 1: calcular la salida de la neurona para esta muestra
+                zi = float(np.dot(xi, self.weights_) + self.bias_)
+                oi = float(self.sigmoid(zi))
 
-                delta = (t - o) * o * (1 - o)
+                # Paso 2: calcular delta para esta muestra
+                # delta = (t - o) * o * (1 - o)
+                #   (t - o)    -> qué tan equivocada estuvo la predicción
+                #   o * (1-o)  -> derivada de la sigmoide (sigma')
+                delta_i = (ti - oi) * oi * (1.0 - oi)
 
-            Este término combina:
-                - qué tan lejos estuvo la predicción: (t - o)
-                - la derivada de la sigmoide: o * (1 - o)
-            """
+                # Paso 3: actualizar pesos con ESTA muestra
+                # delta_wi = eta * delta * xi
+                self.weights_ += self.learning_rate * delta_i * xi
+                self.bias_    += self.learning_rate * delta_i
 
-            delta = error * output * (1.0 - output)
-
-            # Gradiente promedio para los pesos y el sesgo.
-            gradient_weights = (X.T @ delta) / n_samples
-            gradient_bias = float(np.mean(delta))
-
-            # Actualización de parámetros.
-            self.weights_ += self.learning_rate * gradient_weights
-            self.bias_ += self.learning_rate * gradient_bias
-
+            # Al final de la época registramos métricas globales
             probabilities = self.predict_proba(X)
             predictions = self.predict(X)
 
