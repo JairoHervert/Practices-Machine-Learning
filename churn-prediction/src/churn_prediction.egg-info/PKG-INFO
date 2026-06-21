@@ -1,0 +1,17 @@
+Metadata-Version: 2.4
+Name: churn-prediction
+Version: 0.1.0
+Summary: Sistema de predicción de fuga de clientes con Arquitectura Limpia
+Requires-Python: >=3.10
+Requires-Dist: pandas>=2.0.0
+Requires-Dist: numpy>=1.24.0
+Requires-Dist: scikit-learn>=1.2.0
+Requires-Dist: matplotlib>=3.7.0
+Requires-Dist: seaborn>=0.12.0
+Requires-Dist: joblib>=1.2.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0.0; extra == "dev"
+Requires-Dist: black>=23.0.0; extra == "dev"
+Requires-Dist: ruff>=0.0.260; extra == "dev"
+Requires-Dist: mypy>=1.0.0; extra == "dev"

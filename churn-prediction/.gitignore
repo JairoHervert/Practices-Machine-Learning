@@ -1,0 +1,28 @@
+# Caché de Python y archivos compilados
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Entorno Virtual
+venv/
+env/
+ENV/
+
+# Herramientas de Pruebas y Cobertura (pytest)
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Archivos de Datos 
+# (Es buena práctica no subir el CSV original al repositorio si es muy pesado)
+datos/*.csv
+
+# Artefactos generados (Gráficas y Modelos entrenados)
+src/presentacion/reportes/*.png
+src/infraestructura/modelos/persistencia/*.joblib
+
+# Archivos de Entornos de Desarrollo (IDEs) e ignotos del SO
+.vscode/
+.idea/
+*.swp
+.DS_Store
